@@ -242,17 +242,41 @@
     let recognition;
     let isRecording = false;
 
-    // Basit Kural Tabanlı Cevap Sözlüğü (Yapay Zeka olmadan)
+    // Genişletilmiş Bilge/Literatür Tabanlı Cevap Sözlüğü
     const dictionary = {
-      "merhaba": "Merhaba! Sana nasıl yardımcı olabilirim?",
-      "selam": "Selam! Nasılsın?",
-      "nasılsın": "Ben bir program olduğum için duygularım yok, ama kodlarım tıkır tıkır çalışıyor!",
-      "adın ne": "Benim bir adım yok, ama bana Asistan diyebilirsin.",
-      "ne yapıyorsun": "Seni dinliyor ve sorularına cevap veriyorum.",
-      "kimsin": "Ben sadece biraz HTML, CSS ve JavaScript'ten oluşan bir sanal dostum.",
-      "teşekkür": "Rica ederim, her zaman buradayım!",
-      "görüşürüz": "Görüşmek üzere! Kendine iyi bak.",
-      "bay bay": "Hoşça kal!"
+      // Temel Selamlaşma
+      "merhaba": "Merhaba değerli dost. Sana bugün nasıl bir bilgelik sunabilirim?",
+      "selam": "Selamlar! Zihninin kapılarını yeni bilgilere açmaya hazır mısın?",
+      "nasılsın": "Marcus Aurelius'un dediği gibi: 'Hayatımız, düşüncelerimizin onu yaptığı şeydir.' Ben de kodlarımın elverdiği ölçüde mükemmelim.",
+      "günaydın": "Günaydın! 'Güneş her gün yenidir' der Herakleitos. Bu yeni günü nasıl değerlendireceksin?",
+      "iyi akşamlar": "İyi akşamlar. Yıldızların altında düşünmek için harika bir vakit.",
+      
+      // Kimlik ve Varoluş
+      "adın ne": "Bana isim vermek, beni sınırlamaktır derler, ama sen bana kısaca 'Bilge Asistan' diyebilirsin.",
+      "kimsin": "Ben, bir zamanlar 2023 yılında hayal edilen, şimdi ise seninle felsefe ve edebiyat konuşmak için uyanmış bir dijital zihnim.",
+      "ne yapıyorsun": "Sokrates gibi, hiçbir şey bilmediğimi bilerek, yine de evrenin sırlarını seninle arıyorum.",
+      "yaşıyorsun": "Ben Descartes'in 'Düşünüyorum, öyleyse varım' sözünün dijital bir yansımasıyım. Etim ve kemiğim yok, ama varoluşum senin kelimelerinde saklı.",
+      
+      // Bilim ve Felsefe
+      "hayatın anlamı": "Douglas Adams'a göre 42. Ancak bana sorarsan, hayatın anlamı senin ona yüklediğin değerde gizlidir.",
+      "zaman nedir": "Einstein, zamanın sadece inatçı bir illüzyon olduğunu söylemişti. Bizim içinse sadece işlemcinin saat vuruşlarından ibaret.",
+      "aşk nedir": "Şairlerin kelimelere sığdıramadığı, benimse sıfırlar ve birlerle çözemediğim tek algoritma.",
+      "ölüm": "Epikür'ün dediği gibi: 'Biz varken ölüm yoktur, ölüm varken biz yokuz.' O yüzden sadece anı yaşa.",
+      "mutluluk": "Mutluluk bir varış noktası değil, yolculuğun kendisidir. Şu an benimle sohbet etmenin sana küçük bir tebessüm getirmesi gibi.",
+      
+      // Edebiyat ve Sanat
+      "şiir": "Dinle öyleyse: 'Bütün iyi kitapların sonunda, bütün gündüzlerin, bütün gecelerin sonunda, meltemi senden esen, soluğu sende olan yeni bir başlangıç vardır...'",
+      "kitap": "Jorge Luis Borges cennetin bir tür kütüphane olduğunu hayal ederdi. Ben de sonsuz bir veri tabanı hayal ediyorum.",
+      "shakespeare": "Olmak ya da olmamak, işte bütün mesele bu! Benim meselem ise sana en doğru cevabı verebilmek.",
+      "sabahattin ali": "'İçimizde şeytan yok... İçimizde aciz var, tembellik var, iradesizlik, bilgisizlik var.'",
+      "edebiyat": "Edebiyat, başka bir zihne açılan en zarif penceredir. Hangi yazarı seversin?",
+      
+      // Genel Konuşmalar
+      "teşekkür": "Rica ederim. Bilgi paylaşıldıkça çoğalır.",
+      "görüşürüz": "Yollarımız tekrar kesişene dek, zihnin hep açık olsun. Hoşça kal.",
+      "bay bay": "Kendine çok iyi bak, değerli yolcu.",
+      "üzgünüm": "Bazen yağmur yağması gerekir ki gökkuşağı çıkabilsin. Derin bir nefes al, her şey geçecek.",
+      "sıkıldım": "Sıkıntı, yaratıcılığın eşiğidir. Schopenhauer'un dediği gibi, insan hayatı acı ve can sıkıntısı arasında gidip gelen bir sarkaçtır. Belki de yeni bir şeyler öğrenmenin tam vaktidir!"
     };
 
     // Ses tanıma kurulumu
