@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Akıllı Asistan</title>
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --text-color: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated Background Elements */
+    .blob {
+      position: absolute;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.6;
+      animation: float 10s infinite ease-in-out alternate;
+    }
+    .blob-1 {
+      top: 10%; left: 20%;
+      width: 300px; height: 300px;
+      background: #4f46e5;
+      animation-delay: 0s;
+    }
+    .blob-2 {
+      bottom: 10%; right: 20%;
+      width: 400px; height: 400px;
+      background: #c026d3;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, -50px) scale(1.1); }
+    }
+
+    .container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 40px;
+      width: 90%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .face-container {
+      position: relative;
+      margin-bottom: 30px;
+    }
+
+    .face {
+      font-size: 120px;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
+      display: inline-block;
+    }
+
+    .pulse {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 140px;
+      height: 140px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.4) 0%, transparent 70%);
+      border-radius: 50%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .talking .pulse {
+      animation: pulse-ring 1s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
+      opacity: 1;
+    }
+
+    .talking .face {
+      animation: bounce 0.5s infinite alternate;
+    }
+
+    @keyframes pulse-ring {
+      0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    .input-group {
+      display: flex;
+      width: 100%;
+      gap: 10px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    input {
+      flex: 1;
+      padding: 15px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.2);
+      color: white;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .btn {
+      padding: 15px 24px;
+      border-radius: 12px;
+      border: none;
+      background: var(--primary);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-mic {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-mic:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-mic.recording {
+      background: #ef4444;
+      animation: record-pulse 1.5s infinite;
+      border-color: #ef4444;
+    }
+
+    @keyframes record-pulse {
+      0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+    }
+
+    .status-text {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      min-height: 20px;
+      margin-top: 15px;
+    }
+
+    /* Emojis */
+    .icon {
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background effects -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="container">
+    <div class="face-container" id="faceContainer">
+      <div class="pulse"></div>
+      <div class="face" id="face">😀</div>
+    </div>
+
+    <div class="input-group">
+      <input type="text" id="userInput" placeholder="Bir şey yaz veya mikrofonu kullan..." onkeypress="handleKeyPress(event)">
+      <button class="btn btn-mic" id="micBtn" onclick="toggleMic()" title="Sesle Yaz">
+        <span class="icon">🎙️</span>
+      </button>
+    </div>
+    
+    <button class="btn" style="width: 100%;" onclick="processInput()">Gönder</button>
+    
+    <div class="status-text" id="statusText">Seni dinliyorum...</div>
+  </div>
+
+  <script>
+    const face = document.getElementById("face");
+    const faceContainer = document.getElementById("faceContainer");
+    const userInput = document.getElementById("userInput");
+    const statusText = document.getElementById("statusText");
+    const micBtn = document.getElementById("micBtn");
+
+    let isTalking = false;
+    let talkInterval;
+    let recognition;
+    let isRecording = false;
+
+    // Basit Kural Tabanlı Cevap Sözlüğü (Yapay Zeka olmadan)
+    const dictionary = {
+      "merhaba": "Merhaba! Sana nasıl yardımcı olabilirim?",
+      "selam": "Selam! Nasılsın?",
+      "nasılsın": "Ben bir program olduğum için duygularım yok, ama kodlarım tıkır tıkır çalışıyor!",
+      "adın ne": "Benim bir adım yok, ama bana Asistan diyebilirsin.",
+      "ne yapıyorsun": "Seni dinliyor ve sorularına cevap veriyorum.",
+      "kimsin": "Ben sadece biraz HTML, CSS ve JavaScript'ten oluşan bir sanal dostum.",
+      "teşekkür": "Rica ederim, her zaman buradayım!",
+      "görüşürüz": "Görüşmek üzere! Kendine iyi bak.",
+      "bay bay": "Hoşça kal!"
+    };
+
+    // Ses tanıma kurulumu
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = 'tr-TR';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        isRecording = true;
+        micBtn.classList.add("recording");
+        statusText.innerText = "Sizi dinliyorum, konuşun...";
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+        processInput();
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Speech recognition error", event.error);
+        statusText.innerText = "Bir hata oluştu, tekrar deneyin.";
+        stopMic();
+      };
+
+      recognition.onend = () => {
+        stopMic();
+      };
+    } else {
+      micBtn.style.display = 'none'; // Tarayıcı desteklemiyorsa gizle
+    }
+
+    function toggleMic() {
+      if (isRecording) {
+        recognition.stop();
+      } else {
+        recognition.start();
+      }
+    }
+
+    function stopMic() {
+      isRecording = false;
+      micBtn.classList.remove("recording");
+      statusText.innerText = "Bekliyor...";
+    }
+
+    function handleKeyPress(event) {
+      if (event.key === "Enter") {
+        processInput();
+      }
+    }
+
+    function getResponse(text) {
+      let lowerText = text.toLowerCase().trim();
+      
+      // Sözlükte kelime arama
+      for (let key in dictionary) {
+        if (lowerText.includes(key)) {
+          return dictionary[key];
+        }
+      }
+      
+      // Varsayılan cevaplar
+      const fallbacks = [
+        "Hmm, bunu tam anlayamadım.",
+        "İlginç bir düşünce! Başka ne söylemek istersin?",
+        "Bunu duymak güzel.",
+        "Anlıyorum.",
+        "Bunu söylediğin için teşekkürler: " + text
+      ];
+      
+      return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+    }
+
+    function processInput() {
+      let text = userInput.value.trim();
+      if (!text) return;
+
+      // Konuşmayı durdur (eğer zaten konuşuyorsa)
+      speechSynthesis.cancel();
+
+      let response = getResponse(text);
+      
+      statusText.innerText = "Cevap veriliyor...";
+      userInput.value = "";
+      
+      talk(response);
+    }
+
+    function talk(text) {
+      let utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "tr-TR";
+      
+      // Konuşma hızı ve perdesi (isteğe bağlı ayarlanabilir)
+      utterance.rate = 1.0;
+      utterance.pitch = 1.1;
+
+      utterance.onstart = () => {
+        isTalking = true;
+        faceContainer.classList.add("talking");
+        
+        // Ağız animasyonu döngüsü
+        let mouthOpen = false;
+        talkInterval = setInterval(() => {
+          face.textContent = mouthOpen ? "😀" : "😮";
+          mouthOpen = !mouthOpen;
+        }, 150); // 150ms'de bir ağız değiştir
+      };
+
+      utterance.onend = () => {
+        stopTalking();
+      };
+
+      utterance.onerror = () => {
+        stopTalking();
+      };
+
+      speechSynthesis.speak(utterance);
+    }
+
+    function stopTalking() {
+      isTalking = false;
+      clearInterval(talkInterval);
+      faceContainer.classList.remove("talking");
+      face.textContent = "😀";
+      statusText.innerText = "Bekliyor...";
+    }
+  </script>
+</body>
+</html>
