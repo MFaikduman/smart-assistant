@@ -1,5 +1,7 @@
 # 🤖 Akıllı Asistan (Smart Assistant)
 
+> 💡 **Proje Hakkında:** *Bu repo, 2023 yılında yapay zeka (AI) destekli bir konuşma botu yapmak amacıyla kodlamaya başladığım ilk projelerimden biridir.*
+
 Modern web teknolojileri kullanılarak geliştirilmiş, sesle ve metinle etkileşime girebilen kural tabanlı bir sanal asistan arayüzüdür. Tamamen tarayıcı üzerinde, ekstra bir sunucu veya API bağlantısına ihtiyaç duymadan çalışır.
 
 ## ✨ Özellikler
